@@ -1,0 +1,41 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'default.html' %}
+
+
+{% block title %}
+{{post.header}}
+{% endblock title %}
+
+
+{% block content %}
+<h2>{{ post.header }}</h2>
+<h3>{{ post.date|date:'d M Y' }}</h3>
+{{post.content|safe}}
+<h6>Автор: {{post.author}}</h6>
+<br>
+<hr>
+
+
+{% if replies %}
+<div class="dropdown-item">
+<ul>
+<h5>ОТКЛИКИ</h5>
+    {% for reply in replies %}
+    {% if reply.accept == True %}
+    <div class="navbar">
+        <li><p>{{ reply.text }} </p>
+            <p>User: {{ reply.user }} &emsp; &emsp; &emsp; Date: {{ reply.date|date:'h:i d M Y ' }}</p>
+            <br>
+        </li></div>
+        {% endif %}
+    {% endfor %}
+</ul>
+</div>
+{% endif %}
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+</form>
+{% endblock content %}

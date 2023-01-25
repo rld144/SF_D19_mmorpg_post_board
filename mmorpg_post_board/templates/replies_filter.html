@@ -1,0 +1,50 @@
+{% extends 'default.html' %}
+{% load custom_tags %}
+
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ replies.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
+
+   {% if replies %}
+       <table>
+           <tr>
+               <td>Пост</a></td>
+               <td>Отлик</td>
+               <td>Юзер</td>
+               <td>Дата</td>
+               <td>Статус</td>
+               <td>Удалить</td>
+           </tr>
+           {% for reply in replies.qs %}
+           <tr>
+               <td>{{ reply.post.header|truncatechars:20 }}</a></td>
+               <td>{{ reply.text }}</td>
+               <td>{{ reply.user.username }}</td>
+               <td>{{ reply.date|date:'d M Y' }}</td>
+               <td>
+                   {% if reply.accept %}
+                        {{ reply.accept }}
+                   {% else %}
+                        <button><a href= "{% url 'accept_reply' reply.pk %}"> Принять </a></button>
+                   {% endif %}
+               </td>
+               <td><button><a href= "/replies/{{reply.pk}}/delete"> Удалить </a></button></td>
+           </tr>
+           {% endfor %}
+       </table>
+   {% else %}
+       <h2>Откликов нет</h2>
+   {% endif %}
+
+
+
+{% endblock content %}
